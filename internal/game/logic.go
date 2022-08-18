@@ -19,7 +19,7 @@ const (
 func Info() BattlesnakeInfoResponse {
 	log.Printf("INFO")
 	return BattlesnakeInfoResponse{
-		APIVersion: "0.1",
+		APIVersion: "1",
 		Author:     "Smelton01",
 		Color:      string(blue),
 		Head:       string(blue),
