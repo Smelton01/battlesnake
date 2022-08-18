@@ -15,12 +15,13 @@ func main() {
 	api.Route(r)
 	r.Get("/status", status())
 
-	log.Printf("Listening on port 8080...")
-	log.Fatal(http.ListenAndServe(":8080", r))
+	log.Printf("Listening on port 80...")
+	log.Fatal(http.ListenAndServe(":80", r))
 }
 
 func status() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "live")
+
 	}
 }

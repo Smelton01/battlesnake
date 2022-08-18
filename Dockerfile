@@ -33,8 +33,8 @@ COPY --from=base /main /main
 # RUN apk --no-cache add ca-certificates
 # RUN apk update && apk add ca-certificates && rm -rf /var/cache/apk/*
 
-# Expose port 8081 to the outside world
-EXPOSE 8080
+# Expose port 80 to the outside world
+EXPOSE 80
 
 # Run the executable
 ENTRYPOINT ["/main"]
