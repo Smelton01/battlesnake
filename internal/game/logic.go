@@ -3,8 +3,11 @@ package game
 import (
 	"log"
 	"math/rand"
+
+	_ "golang.org/x/tools/cmd/stringer"
 )
 
+//go:generate go run golang.org/x/tools/cmd/stringer -type=move
 type move int8
 
 const (
@@ -85,17 +88,17 @@ func Move(state GameState) BattlesnakeMoveResponse {
 	}
 }
 
-func (m move) String() string {
-	switch m {
-	case 0:
-		return "up"
-	case 1:
-		return "down"
-	case 2:
-		return "left"
-	case 3:
-		return "right"
-	default:
-		return ""
-	}
-}
+// func (m move) String() string {
+// 	switch m {
+// 	case 0:
+// 		return "up"
+// 	case 1:
+// 		return "down"
+// 	case 2:
+// 		return "left"
+// 	case 3:
+// 		return "right"
+// 	default:
+// 		return ""
+// 	}
+// }
