@@ -3,8 +3,6 @@ package game
 import (
 	"log"
 	"math/rand"
-
-	_ "golang.org/x/tools/cmd/stringer"
 )
 
 //go:generate go run golang.org/x/tools/cmd/stringer -type=move
