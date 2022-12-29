@@ -50,27 +50,31 @@ func Move(state *GameState) BattlesnakeMoveResponse {
 	// Step 0: Don't let your battlesnake move back on its own neck
 	head := state.You.Body[0]
 	neck := state.You.Body[1]
+	mybody := state.You.Body
+	body := NewSet(mybody...)
 
 	boardWidth := state.Board.Width
 	boardHeight := state.Board.Height
 
-	if neck.X < head.X || head.X == 0 {
+	if neck.X < head.X || head.X == 0 || body.exits(Coord{X: head.X - 1, Y: head.Y}) {
 		log.Println("not left")
 		moves[left] = false
 	}
-	if neck.X > head.X || head.X == boardWidth-1 {
+	if neck.X > head.X || head.X == boardWidth-1 || body.exits(Coord{X: head.X + 1, Y: head.Y}) {
 		log.Println("not right")
 		moves[right] = false
 	}
-	if neck.Y < head.Y || head.Y == 0 {
+	if neck.Y < head.Y || head.Y == 0 || body.exits(Coord{X: head.X, Y: head.Y - 1}) {
 		log.Println("not down")
 		moves[down] = false
 	}
-	if neck.Y > head.Y || head.Y == boardHeight-1 {
+	if neck.Y > head.Y || head.Y == boardHeight-1 || body.exits(Coord{X: head.X, Y: head.Y + 1}) {
 		log.Println("not up")
 		moves[up] = false
 	}
 
+	// for _, move := range [][]int{{0, 1}, {1, 0}, {0, -1}, {-1, 0}} {
+	// }
 	var nextMove move
 
 	safeMoves := []move{}
@@ -93,18 +97,3 @@ func Move(state *GameState) BattlesnakeMoveResponse {
 		Move: nextMove.String(),
 	}
 }
-
-// func (m move) String() string {
-// 	switch m {
-// 	case 0:
-// 		return "up"
-// 	case 1:
-// 		return "down"
-// 	case 2:
-// 		return "left"
-// 	case 3:
-// 		return "right"
-// 	default:
-// 		return ""
-// 	}
-// }
