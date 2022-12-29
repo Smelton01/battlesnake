@@ -18,7 +18,7 @@ COPY . /app/
 
 
 # Build the Go app
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /main ./cmd/server/main.go
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -o /snek ./cmd/server/main.go
 
 ##
 ## Deploy 
@@ -28,13 +28,17 @@ FROM alpine:3.14
 
 WORKDIR /
 
-COPY --from=base /main /main
+COPY --from=base /snek /snek
 
-# RUN apk --no-cache add ca-certificates
-# RUN apk update && apk add ca-certificates && rm -rf /var/cache/apk/*
+COPY scripts/start.sh /
+
+RUN chmod 755 /start.sh
 
 # Expose port 80 to the outside world
 EXPOSE 80
 
 # Run the executable
-ENTRYPOINT ["/main"]
+ENTRYPOINT ["/start.sh"]
+
+CMD [ "/snek" ]
+

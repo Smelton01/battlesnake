@@ -16,9 +16,9 @@ const (
 )
 
 // Info controls the battlensnake appearance and other permissions
-// See [Personalization]: https://docs.battlesnake.com/references/personalization
 func Info() BattlesnakeInfoResponse {
 	log.Printf("INFO")
+
 	return BattlesnakeInfoResponse{
 		APIVersion: "1",
 		Author:     "Smelton01",
@@ -30,16 +30,16 @@ func Info() BattlesnakeInfoResponse {
 
 // Start is called every time the battlesnake enters a game.
 // The state param contains information about the game that is a bout to be played.
-func Start(state GameState) {
-	log.Printf("%s START\n", state.Game.ID)
+func Start(state *GameState) {
+	log.Printf("START GAME: %s\n", state.Game.ID)
 }
 
 // End is called when a game your battlesnake was participating in ends.
-func End(state GameState) {
-	log.Printf("%s END\n", state.Game.ID)
+func End(state *GameState) {
+	log.Printf("ENDING GAME: %s\n", state.Game.ID)
 }
 
-func Move(state GameState) BattlesnakeMoveResponse {
+func Move(state *GameState) BattlesnakeMoveResponse {
 	moves := map[move]bool{
 		up:    true,
 		down:  true,
@@ -64,25 +64,26 @@ func Move(state GameState) BattlesnakeMoveResponse {
 		moves[up] = false
 	}
 
-	var nextMove string
+	var nextMove move
 
-	safeMoves := []string{}
-	// TODO use stringer to make string from move
+	safeMoves := []move{}
 	for m, isSafe := range moves {
 		if isSafe {
-			safeMoves = append(safeMoves, m.String())
+			safeMoves = append(safeMoves, m)
 		}
 	}
 
 	if len(safeMoves) == 0 {
-		nextMove = down.String()
+		nextMove = down
 		log.Printf("%s MOVE %d: No safe moves found! Moving %s\n", state.Game.ID, state.Turn, nextMove)
 	} else {
 		nextMove = safeMoves[rand.Intn(len(safeMoves))]
 	}
 
+	log.Println("MOVING: ", nextMove)
+
 	return BattlesnakeMoveResponse{
-		Move: nextMove,
+		Move: nextMove.String(),
 	}
 }
 

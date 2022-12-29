@@ -3,8 +3,7 @@ module github.com/smelton01/battlesnake
 go 1.18
 
 require (
-	github.com/go-chi/chi/v5 v5.0.7 // indirect
-	golang.org/x/mod v0.6.0-dev.0.20220419223038-86c51ed26bb4 // indirect
-	golang.org/x/sys v0.0.0-20220722155257-8c9f86f7a55f // indirect
-	golang.org/x/tools v0.1.12 // indirect
+	github.com/aws/aws-lambda-go v1.36.0
+	github.com/awslabs/aws-lambda-go-api-proxy v0.13.3
+	github.com/go-chi/chi/v5 v5.0.7
 )

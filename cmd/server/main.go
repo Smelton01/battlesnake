@@ -1,33 +1,24 @@
 package main
 
 import (
-	"fmt"
 	"log"
-	"net/http"
-	"os"
 
+	"github.com/aws/aws-lambda-go/lambda"
+	"github.com/awslabs/aws-lambda-go-api-proxy/httpadapter"
 	"github.com/go-chi/chi/v5"
 	"github.com/smelton01/battlesnake/internal/api"
 )
 
 func main() {
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "80"
-	}
-
-	r := chi.NewRouter()
-
-	api.Route(r)
-	r.Get("/status", status())
-
-	log.Printf("Listening on port %s.", port)
-	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", port), r))
+	Execute()
 }
 
-func status() http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "live")
+func Execute() {
+	log.Println("Started::: ")
 
-	}
+	r := chi.NewRouter()
+	api.BindAll(r)
+
+	lambda.Start(httpadapter.New(r).ProxyWithContext)
+
 }

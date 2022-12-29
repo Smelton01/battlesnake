@@ -1,0 +1,52 @@
+name: Pull request check
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.19.x
+
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v3
+
+      - uses: actions/cache@v3
+        with:
+          path: ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+      - name: Test
+        run: go test ./... -coverprofile=coverage.out -covermode=count
+
+      - name: Generate coverage HTML
+        run: go tool cover -html=coverage.out -o coverage.html
+
+      - name: Upload raw test coverage data
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-coverage
+          path: ./coverage.out
+
+      - name: Upload test coverage html
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-coverage
+          path: ./coverage.html
+
+  golangci-lint:
+    name: golangci lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v3
