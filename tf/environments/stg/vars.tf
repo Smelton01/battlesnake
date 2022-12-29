@@ -3,7 +3,7 @@ variable "aws_region" {
 }
 
 variable "aws_account_id" {
-  default = ""
+  default = "998684527758"
 }
 
 variable "snek_image_tag" {
