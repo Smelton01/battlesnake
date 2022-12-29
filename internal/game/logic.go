@@ -80,50 +80,50 @@ func Move(state *GameState) BattlesnakeMoveResponse {
 	}
 
 	// choos a food at random
-	target := food[rand.Intn(len(food)-1)]
-
-	// for _, move := range [][]int{{0, 1}, {1, 0}, {0, -1}, {-1, 0}} {
-	// }
-	var nextMove move
-
 	safeMoves := []move{}
 	for m, isSafe := range moves {
 		if isSafe {
 			safeMoves = append(safeMoves, m)
 		}
 	}
-
-	if target.X < head.X {
-		for _, move := range safeMoves {
-			if move == left {
-				nextMove = left
-			}
-		}
-	} else {
-		for _, move := range safeMoves {
-			if move == right {
-				nextMove = right
-			}
-		}
-	}
-
-	if target.Y < head.Y {
-		for _, move := range safeMoves {
-			if move == up {
-				nextMove = up
-			}
-		}
-	} else {
-		for _, move := range safeMoves {
-			if move == down {
-				nextMove = down
-			}
-		}
-	}
+	var nextMove move
 
 	if len(safeMoves) == 0 {
 		nextMove = down
 		log.Printf("%s MOVE %d: No safe moves found! Moving %s\n", state.Game.ID, state.Turn, nextMove)
+	} else if len(food) > 0 {
+		target := food[rand.Intn(len(food)-1)]
+
+		// for _, move := range [][]int{{0, 1}, {1, 0}, {0, -1}, {-1, 0}} {
+		// }
+
+		if target.X < head.X {
+			for _, move := range safeMoves {
+				if move == left {
+					nextMove = left
+				}
+			}
+		} else {
+			for _, move := range safeMoves {
+				if move == right {
+					nextMove = right
+				}
+			}
+		}
+
+		if target.Y < head.Y {
+			for _, move := range safeMoves {
+				if move == up {
+					nextMove = up
+				}
+			}
+		} else {
+			for _, move := range safeMoves {
+				if move == down {
+					nextMove = down
+				}
+			}
+		}
 	} else {
 		nextMove = safeMoves[rand.Intn(len(safeMoves))]
 	}
