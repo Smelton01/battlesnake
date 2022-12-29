@@ -21,6 +21,7 @@ resource "aws_iam_role" "terraform_role" {
             "Action": "sts:AssumeRoleWithWebIdentity",
             "Condition": {
                 "StringLike": {
+                    "token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
                     "token.actions.githubusercontent.com:sub": "repo:Smelton01/battlesnake:*"
                 }
             }
