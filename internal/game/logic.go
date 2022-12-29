@@ -60,6 +60,7 @@ func Move(state *GameState) BattlesnakeMoveResponse {
 
 	boardWidth := state.Board.Width
 	boardHeight := state.Board.Height
+	food := state.Board.Food
 
 	if neck.X < head.X || head.X == 0 || avoid.exits(Coord{X: head.X - 1, Y: head.Y}) {
 		log.Println("not left")
@@ -78,6 +79,9 @@ func Move(state *GameState) BattlesnakeMoveResponse {
 		moves[up] = false
 	}
 
+	// choos a food at random
+	target := food[rand.Intn(len(food)-1)]
+
 	// for _, move := range [][]int{{0, 1}, {1, 0}, {0, -1}, {-1, 0}} {
 	// }
 	var nextMove move
@@ -86,6 +90,34 @@ func Move(state *GameState) BattlesnakeMoveResponse {
 	for m, isSafe := range moves {
 		if isSafe {
 			safeMoves = append(safeMoves, m)
+		}
+	}
+
+	if target.X < head.X {
+		for _, move := range safeMoves {
+			if move == left {
+				nextMove = left
+			}
+		}
+	} else {
+		for _, move := range safeMoves {
+			if move == right {
+				nextMove = right
+			}
+		}
+	}
+
+	if target.Y < head.Y {
+		for _, move := range safeMoves {
+			if move == down {
+				nextMove = down
+			}
+		}
+	} else {
+		for _, move := range safeMoves {
+			if move == down {
+				nextMove = up
+			}
 		}
 	}
 
