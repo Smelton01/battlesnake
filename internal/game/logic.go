@@ -51,24 +51,29 @@ func Move(state *GameState) BattlesnakeMoveResponse {
 	head := state.You.Body[0]
 	neck := state.You.Body[1]
 	mybody := state.You.Body
-	body := NewSet(mybody...)
+	avoid := NewSet(mybody...)
+
+	// Add other snakes to the avoid list
+	for _, snake := range state.Board.Snakes {
+		avoid.add(snake.Body...)
+	}
 
 	boardWidth := state.Board.Width
 	boardHeight := state.Board.Height
 
-	if neck.X < head.X || head.X == 0 || body.exits(Coord{X: head.X - 1, Y: head.Y}) {
+	if neck.X < head.X || head.X == 0 || avoid.exits(Coord{X: head.X - 1, Y: head.Y}) {
 		log.Println("not left")
 		moves[left] = false
 	}
-	if neck.X > head.X || head.X == boardWidth-1 || body.exits(Coord{X: head.X + 1, Y: head.Y}) {
+	if neck.X > head.X || head.X == boardWidth-1 || avoid.exits(Coord{X: head.X + 1, Y: head.Y}) {
 		log.Println("not right")
 		moves[right] = false
 	}
-	if neck.Y < head.Y || head.Y == 0 || body.exits(Coord{X: head.X, Y: head.Y - 1}) {
+	if neck.Y < head.Y || head.Y == 0 || avoid.exits(Coord{X: head.X, Y: head.Y - 1}) {
 		log.Println("not down")
 		moves[down] = false
 	}
-	if neck.Y > head.Y || head.Y == boardHeight-1 || body.exits(Coord{X: head.X, Y: head.Y + 1}) {
+	if neck.Y > head.Y || head.Y == boardHeight-1 || avoid.exits(Coord{X: head.X, Y: head.Y + 1}) {
 		log.Println("not up")
 		moves[up] = false
 	}
