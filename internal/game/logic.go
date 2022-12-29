@@ -105,21 +105,19 @@ func Move(state *GameState) BattlesnakeMoveResponse {
 						nextMove = left
 					}
 				}
-			} else {
+			} else if target.X >= head.X {
 				for _, move := range safeMoves {
 					if move == right {
 						nextMove = right
 					}
 				}
-			}
-
-			if target.Y <= head.Y {
+			} else if target.Y <= head.Y {
 				for _, move := range safeMoves {
 					if move == up {
 						nextMove = up
 					}
 				}
-			} else {
+			} else if target.Y >= head.Y {
 				for _, move := range safeMoves {
 					if move == down {
 						nextMove = down
