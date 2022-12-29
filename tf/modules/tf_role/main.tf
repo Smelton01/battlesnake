@@ -52,6 +52,26 @@ resource "aws_iam_role_policy" "terraform_role_policy" {
             ]
         },
         {
+            "Sid": "OIDC",
+            "Effect": "Allow",
+            "Action": [
+                "iam:GetOpenIDConnectProvider*"
+            ],
+            "Resource": [
+                "arn:aws:iam::${var.aws_tenant_id}:oidc-provider/token.actions.githubusercontent.com"
+            ]
+        },
+        {
+            "Sid": "APIGW",
+            "Effect": "Allow",
+            "Action": [
+                "apigateway:*"
+            ],
+            "Resource": [
+                "arn:aws:apigateway:*:${var.project_name}*"
+            ]
+        },
+        {
             "Sid": "S3",
             "Effect": "Allow",
             "Action": [
