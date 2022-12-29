@@ -109,14 +109,14 @@ func Move(state *GameState) BattlesnakeMoveResponse {
 
 	if target.Y < head.Y {
 		for _, move := range safeMoves {
-			if move == down {
-				nextMove = down
+			if move == up {
+				nextMove = up
 			}
 		}
 	} else {
 		for _, move := range safeMoves {
 			if move == down {
-				nextMove = up
+				nextMove = down
 			}
 		}
 	}
