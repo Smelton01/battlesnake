@@ -88,6 +88,7 @@ func Move(state *GameState) BattlesnakeMoveResponse {
 	}
 	nextMove := move(-1)
 
+	// 0,0 point is located in the bottom left corner for some reason, therefore positive Y is going up
 	if len(safeMoves) == 0 {
 		nextMove = down
 		log.Printf("%s MOVE %d: No safe moves found! Moving %s\n", state.Game.ID, state.Turn, nextMove)
@@ -111,13 +112,13 @@ func Move(state *GameState) BattlesnakeMoveResponse {
 						nextMove = right
 					}
 				}
-			} else if target.Y <= head.Y {
+			} else if target.Y >= head.Y {
 				for _, move := range safeMoves {
 					if move == up {
 						nextMove = up
 					}
 				}
-			} else if target.Y >= head.Y {
+			} else if target.Y <= head.Y {
 				for _, move := range safeMoves {
 					if move == down {
 						nextMove = down
