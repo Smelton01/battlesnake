@@ -51,16 +51,19 @@ func Move(state *GameState) BattlesnakeMoveResponse {
 	head := state.You.Body[0]
 	neck := state.You.Body[1]
 
-	if neck.X < head.X {
+	boardWidth := state.Board.Width
+	boardHeight := state.Board.Height
+
+	if neck.X < head.X || head.X == 0 {
 		moves[left] = false
 	}
-	if neck.X > head.X {
+	if neck.X > head.X || head.X == boardWidth-1 {
 		moves[right] = false
 	}
-	if neck.Y < head.Y {
+	if neck.Y < head.Y || head.Y == boardHeight-1 {
 		moves[down] = false
 	}
-	if neck.Y < head.Y {
+	if neck.Y < head.Y || head.Y == 0 {
 		moves[up] = false
 	}
 
