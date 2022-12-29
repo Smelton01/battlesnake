@@ -86,13 +86,14 @@ func Move(state *GameState) BattlesnakeMoveResponse {
 			safeMoves = append(safeMoves, m)
 		}
 	}
-	var nextMove move
+	nextMove := move(-1)
 
 	if len(safeMoves) == 0 {
 		nextMove = down
 		log.Printf("%s MOVE %d: No safe moves found! Moving %s\n", state.Game.ID, state.Turn, nextMove)
 	} else if len(food) > 0 {
 		target := food[rand.Intn(len(food)-1)]
+		log.Println("Found target at: ", target)
 
 		// for _, move := range [][]int{{0, 1}, {1, 0}, {0, -1}, {-1, 0}} {
 		// }
@@ -125,6 +126,10 @@ func Move(state *GameState) BattlesnakeMoveResponse {
 			}
 		}
 	} else {
+		nextMove = safeMoves[rand.Intn(len(safeMoves))]
+	}
+
+	if nextMove == -1 {
 		nextMove = safeMoves[rand.Intn(len(safeMoves))]
 	}
 
