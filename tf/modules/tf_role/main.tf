@@ -68,7 +68,7 @@ resource "aws_iam_role_policy" "terraform_role_policy" {
                 "apigateway:*"
             ],
             "Resource": [
-                "arn:aws:apigateway:*:${var.project_name}*"
+                "arn:aws:apigateway:*"
             ]
         },
         {
