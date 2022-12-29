@@ -9,71 +9,60 @@ import (
 	"github.com/smelton01/battlesnake/internal/game"
 )
 
-func status() http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		log.Println("STATUS: ", r.URL)
-		fmt.Fprintf(w, "live")
+func status(w http.ResponseWriter, r *http.Request) {
+	log.Println("STATUS: ", r.URL)
+	fmt.Fprintf(w, "live")
+}
 
+func HandleIndex(w http.ResponseWriter, r *http.Request) {
+	response := game.Info()
+	w.Header().Set("Content-Type", "application/json")
+
+	err := json.NewEncoder(w).Encode(response)
+	if err != nil {
+		log.Printf("ERROR: Failed to encode response, %s", err)
+		return
 	}
 }
 
-func HandleIndex() http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		response := game.Info()
-		w.Header().Set("Content-Type", "application/json")
+func HandleStart(w http.ResponseWriter, r *http.Request) {
+	state := &game.GameState{}
 
-		err := json.NewEncoder(w).Encode(response)
-		if err != nil {
-			log.Printf("ERROR: Failed to encode response, %s", err)
-			return
-		}
+	err := json.NewDecoder(r.Body).Decode(state)
+	if err != nil {
+		log.Printf("ERROR: Failed to decode start json, %s", err)
+		return
+	}
+
+	game.Start(state)
+}
+
+func HandleMove(w http.ResponseWriter, r *http.Request) {
+	state := &game.GameState{}
+
+	err := json.NewDecoder(r.Body).Decode(&state)
+	if err != nil {
+		log.Printf("ERROR: Failed to decode move json, %s", err)
+		return
+	}
+
+	response := game.Move(state)
+
+	w.Header().Set("Content-Type", "application/json")
+	err = json.NewEncoder(w).Encode(response)
+	if err != nil {
+		log.Printf("ERROR: Failed to encode move response, %s", err)
+		return
 	}
 }
 
-func HandleStart() http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		state := &game.GameState{}
+func HandleEnd(w http.ResponseWriter, r *http.Request) {
+	state := &game.GameState{}
 
-		err := json.NewDecoder(r.Body).Decode(state)
-		if err != nil {
-			log.Printf("ERROR: Failed to decode start json, %s", err)
-			return
-		}
-
-		game.Start(state)
+	err := json.NewDecoder(r.Body).Decode(state)
+	if err != nil {
+		log.Printf("ERROR: Failed to decode end json, %s", err)
+		return
 	}
-}
-
-func HandleMove() http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		state := &game.GameState{}
-
-		err := json.NewDecoder(r.Body).Decode(&state)
-		if err != nil {
-			log.Printf("ERROR: Failed to decode move json, %s", err)
-			return
-		}
-
-		response := game.Move(state)
-
-		w.Header().Set("Content-Type", "application/json")
-		err = json.NewEncoder(w).Encode(response)
-		if err != nil {
-			log.Printf("ERROR: Failed to encode move response, %s", err)
-			return
-		}
-	}
-}
-
-func HandleEnd() http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		state := &game.GameState{}
-
-		err := json.NewDecoder(r.Body).Decode(state)
-		if err != nil {
-			log.Printf("ERROR: Failed to decode end json, %s", err)
-			return
-		}
-		game.End(state)
-	}
+	game.End(state)
 }
