@@ -58,6 +58,9 @@ func Move(state *GameState) BattlesnakeMoveResponse {
 		avoid.add(snake.Body...)
 	}
 
+	// Avoid all hazards
+	avoid.add(state.Board.Hazards...)
+
 	boardWidth := state.Board.Width
 	boardHeight := state.Board.Height
 	food := state.Board.Food
